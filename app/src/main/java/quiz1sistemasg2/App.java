@@ -4,53 +4,160 @@
 package quiz1sistemasg2;
 
 public class App {
-    
 
     public static void main(String[] args) {
-        
-       
+
+        String caracter = "";
+        int horasTotales = 0;
+        int estudiante = 0;
+        int valorHora = 0;
+        int descuento = 0;
+        String vehiculo = "";
+
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Ingrese qué vehículo estacionó \n C: Carro \n M: Moto \n B: Bicicleta");
+        caracter = sc.nextLine();
+        sc.nextLine();
+
+        System.out.println("¿Cuántas horas permaneción en el parqueadero?");
+        horasTotales = sc.nextInt();
+        sc.nextLine();
+
+        valorHora = calcularValorHora(caracter, horasTotales);
+
+        System.out.println("¿Eres estudiante? \n 1: Si \n 2: No");
+        estudiante = sc.nextInt();
+        sc.nextLine();
+
+        descuento = calcularDescuento(valorHora, estudiante, horasTotales);
+
+        switch (caracter) {
+            case "C":
+                vehiculo = "Carro";
+                break;
+            case "M": 
+                vehiculo = "Moto";
+                break;
+            case "B":
+                vehiculo = "Bicicleta";
+                break;
+            default:
+                break;
+        }
+        System.out.println("Su factura es: \n Tipo de vehículo: " + vehiculo + " \n Horas de permanencia: "
+                + horasTotales + " \n Valor total antes de descuentos: " + valorHora + "\n Descuento por permanencia: "
+                + descuento + "\n Valor total incluyendo IVA: " + calcularFactura(valorHora, descuento));
 
     }
 
-    /*  Implemente una funcion llamada calcularValorHora que cumpla con las siguientes caracteristicas
-        * Recibe: 
-            - Una cadena de caracteres que representa el tipo de vehiculo (C, M o B)
-            - Un entero que representa la cantidad de horas de permanencia
-        * Retorna:
-            - Un entero representando el valor total de las boletas
-        * Controlar errores retornando -1
-    */
-    //------------------------------------------------------------------
-    
+    public static int calcularValorHora(String caracter, int horas) {
+        try {
+            double horasExtra = 0.0;
+            if ( horas < 0) {
+                return -1;
+            }
+            switch (caracter) {
+                case "C":
+                    if (horas > 3) {
+                        horasExtra = horas - 3;
+                        return (int) ((horas * 5000) + 2000 * horasExtra);
+                    } else if(horas <= 3){
+                        return (int) horas * 5000;
+                    }
+                    break;
+                case "M":
+                    if (horas > 3) {
+                        horasExtra = horas - 3;
+                        return (int) ((horas * 3000) + 2000 * horasExtra);
+                    } if(horas <= 3){
+                        return (int) horas * 3000;
+                    }
+                    break;
+                case "B":
+                    if (horas > 3) {
+                        horasExtra = horas - 3;
+                        return (int) ((horas * 1000) + 2000 * horasExtra);
+                    } if(horas <= 3){
+                        return (int) horas * 1000;
+                    }
+                    break;
+                default:
+                    return (int) horas * 5000;
+            }
 
+        } catch (Exception e) {
+            return -1;
+        }
+        return horas;
+    }
+    /*
+     * Implemente una funcion llamada calcularValorHora que cumpla con las
+     * siguientes caracteristicas
+     * Recibe:
+     * - Una cadena de caracteres que representa el tipo de vehiculo (C, M o B)
+     * - Un entero que representa la cantidad de horas de permanencia
+     * Retorna:
+     * - Un entero representando el valor total de las boletas
+     * Controlar errores retornando -1
+     */
+    // ------------------------------------------------------------------
 
-    //------------------------------------------------------------------
+    public static int calcularDescuento(int valorTotal, int estudiante, int horas) {
+        try {
+            int descuento = 0;
+            if (horas < 0) {
+                return -1;
+            }
 
-    /*  Implemente una funcion llamada calcularDescuento que cumpla con las siguientes caracteristicas
-        * Recibe:
-            - Un entero representando el valor total de las horas
-            - Un entero representando la si es estudiante o no
-            - Un entero represenatando la cantidad de horas
-        * Retorna:
-            - Un entero representando el valor del descuento
-        * Controlar errores retornando -1
-    */
-    //------------------------------------------------------------------
-    
+            if (horas > 4 && estudiante == 1) {
+                descuento = 35;
+            } else if (horas > 4) {
+                descuento = 30;
+            } else {
+                descuento = 0;
+            }
+            return descuento;
+        } catch (Exception e) {
+            return -1;
+        }
+    }
 
+    // ------------------------------------------------------------------
 
-    //------------------------------------------------------------------
+    /*
+     * Implemente una funcion llamada calcularDescuento que cumpla con las
+     * siguientes caracteristicas
+     * Recibe:
+     * - Un entero representando el valor total de las horas
+     * - Un entero representando la si es estudiante o no
+     * - Un entero represenatando la cantidad de horas
+     * Retorna:
+     * - Un entero representando el valor del descuento
+     * Controlar errores retornando -1
+     */
+    // ------------------------------------------------------------------
 
-    /*  Implemente una funcion llamada calcularFactura que cumpla con las siguientes caracteristicas
-        * Recibe:
-            - Un entero representando el valor total de las horas
-            - Un entero representando el valor del descuento
-        * Retorna:
-            - Un entero representando el valor del total de la factura incluyendo el iva
-    */
-    //------------------------------------------------------------------
-    
+    public static int calcularFactura(int valorTotal, int valorDescuento) {
+        double valorTotalPagar = 0;
+        if (valorDescuento > 0) {
+            valorTotalPagar = valorTotal - (valorTotal * (valorDescuento / 100));
+        } else {
+            valorTotalPagar = valorTotal;
+        }
+        return (int) (valorTotalPagar + (valorTotal * 0.19));
+    }
+    // ------------------------------------------------------------------
 
+    /*
+     * Implemente una funcion llamada calcularFactura que cumpla con las siguientes
+     * caracteristicas
+     * Recibe:
+     * - Un entero representando el valor total de las horas
+     * - Un entero representando el valor del descuento
+     * Retorna:
+     * - Un entero representando el valor del total de la factura incluyendo el iva
+     */
+    // ------------------------------------------------------------------
 
-    //------------------------------------------------------------------
+    // ------------------------------------------------------------------
 }
